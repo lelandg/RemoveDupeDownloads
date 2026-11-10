@@ -5,9 +5,9 @@ import sys
 import traceback
 from datetime import datetime
 
-from PyQt5.QtCore import Qt, QSettings, QPoint, QSize
-from PyQt5.QtWidgets import (
-    QApplication, QMainWindow, QVBoxLayout, QHBoxLayout, QPushButton,
+from PySide6.QtCore import Qt, QSettings, QPoint, QSize
+from PySide6.QtWidgets import (
+    QAbstractItemView, QApplication, QMainWindow, QVBoxLayout, QHBoxLayout, QPushButton,
     QLineEdit, QLabel, QWidget, QSizePolicy, QTextEdit, QTableWidgetItem, QHeaderView,
     QTableWidget, QFileDialog
 )
@@ -45,7 +45,7 @@ class DuplicateFileDeleter(QMainWindow):
 
         # Label at the top
         self.label = QLabel("Delete Duplicate Downloads")
-        self.label.setAlignment(Qt.AlignCenter)
+        self.label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         main_layout.addWidget(self.label)
 
         # Folder browse layout
@@ -62,7 +62,7 @@ class DuplicateFileDeleter(QMainWindow):
 
         # Results (matched files) listbox
         self.file_listbox = QTableWidget()
-        self.file_listbox.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        self.file_listbox.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
         # Connect signal to slot
         self.file_listbox.itemClicked.connect(self.highlight_entire_row)
 
@@ -71,8 +71,8 @@ class DuplicateFileDeleter(QMainWindow):
         # Setting up the File Listbox as a table:
         self.file_listbox.setColumnCount(4)
         self.file_listbox.setHorizontalHeaderLabels(["Folder", "File Name", "Size", "Date Modified"])
-        self.file_listbox.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
-        self.file_listbox.setEditTriggers(QTableWidget.NoEditTriggers)
+        self.file_listbox.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
+        self.file_listbox.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
         self.file_listbox.cellEntered.connect(self.show_tooltip)
 
         # Manually set fixed widths for "File Size" and "Date Modified" columns
@@ -83,7 +83,7 @@ class DuplicateFileDeleter(QMainWindow):
 
         # Enable resizable columns
         header = self.file_listbox.horizontalHeader()
-        header.setSectionResizeMode(QHeaderView.Interactive)  # Allows resizing via mouse
+        header.setSectionResizeMode(QHeaderView.ResizeMode.Interactive)  # Allows resizing via mouse
         header.setStretchLastSection(True)  # Optional: Stretch the last column to fill space
 
         # Delete button
@@ -227,11 +227,11 @@ class DuplicateFileDeleter(QMainWindow):
 
         # Dynamically resize "File Name" column to fit the content
         file_name_column_index = 0  # Assuming 'File Name' is the first column
-        self.file_listbox.horizontalHeader().setSectionResizeMode(file_name_column_index, QHeaderView.ResizeToContents)
+        self.file_listbox.horizontalHeader().setSectionResizeMode(file_name_column_index, QHeaderView.ResizeMode.ResizeToContents)
 
         # Dynamically resize "Folder" column to fit remaining window space
         folder_column_index = 1  # Assuming 'Folder' is the second column
-        self.file_listbox.horizontalHeader().setSectionResizeMode(folder_column_index, QHeaderView.Stretch)
+        self.file_listbox.horizontalHeader().setSectionResizeMode(folder_column_index, QHeaderView.ResizeMode.Stretch)
 
         # Optional: Adjust the table widget to refresh and display properly
         self.file_listbox.resizeColumnsToContents()
@@ -347,4 +347,4 @@ if __name__ == "__main__":
     app = QApplication(sys.argv)
     window = DuplicateFileDeleter()
     window.show()
-    sys.exit(app.exec_())
+    sys.exit(app.exec())
